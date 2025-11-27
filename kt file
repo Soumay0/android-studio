@@ -1,0 +1,49 @@
+package com.example.myapplication
+
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // 1. Initialize all the views (connect to XML)
+        val etName = findViewById<EditText>(R.id.etName)
+        val etRegNo = findViewById<EditText>(R.id.etRegNo)
+        val etTotal = findViewById<EditText>(R.id.etTotal)
+        val etAttended = findViewById<EditText>(R.id.etAttended)
+        val btnCheck = findViewById<Button>(R.id.btnCheck)
+        val tvResult = findViewById<TextView>(R.id.tvResult)
+
+        // 2. Set the click listener
+        btnCheck.setOnClickListener {
+            val totalText = etTotal.text.toString()
+            val attendedText = etAttended.text.toString()
+
+            // Ensure the user didn't leave boxes empty
+            if (totalText.isNotEmpty() && attendedText.isNotEmpty()) {
+                val total = totalText.toDouble()
+                val attended = attendedText.toDouble()
+
+                // Calculate percentage
+                val percentage = (attended / total) * 100
+
+                // Check rule: Must be 75% or higher
+                if (percentage >= 75) {
+                    tvResult.text = "Eligible! Attendance: ${String.format("%.2f", percentage)}%"
+                    tvResult.setTextColor(android.graphics.Color.GREEN)
+                } else {
+                    tvResult.text = "Not Eligible. Attendance: ${String.format("%.2f", percentage)}%"
+                    tvResult.setTextColor(android.graphics.Color.RED)
+                }
+            } else {
+                tvResult.text = "Please enter all details"
+                tvResult.setTextColor(android.graphics.Color.BLACK)
+            }
+        }
+    }
+}
